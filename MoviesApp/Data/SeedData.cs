@@ -20,7 +20,12 @@ namespace MoviesApp.Data
                 {
                     return;   // DB has been seeded
                 }
-                
+                context.Actors.Add(new Actor
+                {
+                    Name = "Ryan",
+                    Surname = "Gosling",
+                    DateOfBirth = DateTime.Parse("1980-11-12")
+                });
                 context.Movies.AddRange(
                     new Movie
                     {
@@ -29,8 +34,6 @@ namespace MoviesApp.Data
                         Genre = "Romantic Comedy",
                         Price = 7.99M
                     },
-                    
-
                     new Movie
                     {
                         Title = "Ghostbusters ",
