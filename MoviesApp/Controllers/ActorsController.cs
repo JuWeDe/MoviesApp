@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoviesApp.Data;
+using MoviesApp.Filters;
 using MoviesApp.Models;
 using MoviesApp.ViewModels;
 
@@ -67,6 +68,7 @@ public class ActorsController : Controller
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidActorsBirthDate]
         public IActionResult Create([Bind("Name,Surname,DateOfBirth")] InputActorViewModel inputModel)
         {
             if (ModelState.IsValid)
@@ -113,6 +115,7 @@ public class ActorsController : Controller
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidActorsBirthDate]
         public IActionResult Edit(int id, [Bind("Name,Surname,DateOfBirth")] EditActorViewModel editModel)
         {
             if (ModelState.IsValid)
@@ -176,9 +179,13 @@ public class ActorsController : Controller
         public IActionResult DeleteConfirmed(int id)
         {
             var actor = _context.Actors.Find(id);
-            _context.Actors.Remove(actor);
-            _context.SaveChanges();
-            _logger.LogError("Actor with id {ActorId} has been deleted!", actor.Id);
+            if (actor != null)
+            {
+                _context.Actors.Remove(actor);
+                _context.SaveChanges();
+                _logger.LogError("Actor with id {ActorId} has been deleted!", actor.Id);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
